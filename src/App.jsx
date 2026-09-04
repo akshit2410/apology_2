@@ -372,7 +372,7 @@ export default function App() {
               <p className="apology-text">
                 I'm sorry for being such a dummy. You mean the world to me, 
                 and I never want to see you upset because of me. 
-                I promise to be better — because you deserve nothing less. 💜
+                I promise to be better, because you deserve nothing less. 💜
               </p>
               <hr className="divider" />
               <p className="compliment-text">
@@ -382,10 +382,10 @@ export default function App() {
               <div className="kannada-section">
                 <p className="kannada-label">in Kannada, just for you 💜</p>
                 <p className="kannada-text">
-                  ನಂಗೆ ತುಂಬಾ sorry ಕಣೆ 🥺 ನೀನು ನಂಗೆ ಎಷ್ಟು important ಅಂತ 
-                  ನಂಗೆ ಗೊತ್ತು. ನಿನ್ನನ್ನ ನೋಯಿಸೋಕೆ ನಂಗೆ ಇಷ್ಟ ಇಲ್ಲ. 
-                  ಇನ್ಮೇಲೆ ನಾನು ಚೆನ್ನಾಗಿ ಇರ್ತೀನಿ, promise. 
-                  ನೀನು ನನ್ನ ಪ್ರಪಂಚ 💜
+                  Nange tumba sorry kane 🥺 Neenu nange eshtu important anta 
+                  nange gottu. Ninnanna noyisoke nange ishta illa. 
+                  Inmele naanu chennagi irteeni, promise. 
+                  Neenu nanna prapancha 💜
                 </p>
               </div>
             </motion.div>
