@@ -1,0 +1,412 @@
+/* ===== RESET & BASE ===== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Lavender Palette */
+  --bg-start: #E8E0F0;
+  --bg-end: #D1C4E9;
+  --bg-deep: #B39DDB;
+  --accent-pink: #FF6B9D;
+  --accent-pink-light: #FF8FB4;
+  --accent-pink-dark: #E91E6C;
+  --heart-glow: rgba(255, 107, 157, 0.4);
+  --text-primary: #3C2A5A;
+  --text-secondary: #6A5A82;
+  --text-light: #8B7DA8;
+  --photo-glow: rgba(248, 187, 208, 0.6);
+  --card-bg: rgba(255, 255, 255, 0.25);
+  --card-border: rgba(255, 255, 255, 0.4);
+  --overlay-white: rgba(255, 255, 255, 0.15);
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Quicksand', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+body {
+  background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 40%, var(--bg-deep) 70%, #C5A3D9 100%);
+  background-size: 300% 300%;
+  animation: gradientShift 12s ease-in-out infinite;
+  background-attachment: fixed;
+  color: var(--text-primary);
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  25% { background-position: 50% 0%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 100%; }
+}
+
+#root {
+  height: 100%;
+}
+
+/* ===== APP CONTAINER ===== */
+.app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ===== AMBIENT FLOATING HEARTS ===== */
+.ambient-heart {
+  position: fixed;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 0;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(0deg) scale(0.5);
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.15;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20vh) rotate(360deg) scale(1);
+  }
+}
+
+/* ===== MAIN HEART ===== */
+.heart-container {
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.main-heart {
+  width: 260px;
+  height: 260px;
+  position: relative;
+  animation: heartPulse 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 40px var(--heart-glow)) drop-shadow(0 0 80px rgba(255, 107, 157, 0.25));
+  transition: transform 0.15s ease;
+}
+
+.main-heart:active {
+  transform: scale(0.92);
+}
+
+.main-heart svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes heartPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.12);
+  }
+  30% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.08);
+  }
+  60% {
+    transform: scale(1);
+  }
+}
+
+.tap-hint {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  animation: hintPulse 2s ease-in-out infinite;
+  user-select: none;
+}
+
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ===== EXPLOSION PARTICLES ===== */
+.explosion-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.explosion-heart {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* ===== REVEALED CONTENT ===== */
+.content-container {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 24px;
+  max-width: 440px;
+  width: 100%;
+  max-height: 100vh;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.content-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Photo */
+.photo-wrapper {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow:
+    0 0 40px var(--photo-glow),
+    0 0 80px rgba(248, 187, 208, 0.3),
+    0 8px 32px rgba(60, 42, 90, 0.15);
+  border: 4px solid rgba(255, 255, 255, 0.5);
+}
+
+.photo-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-pink-light), var(--bg-deep), var(--accent-pink));
+  z-index: -1;
+  animation: rotateGlow 4s linear infinite;
+}
+
+@keyframes rotateGlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+}
+
+/* Glass card */
+.message-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 32px 28px;
+  text-align: center;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(60, 42, 90, 0.08);
+}
+
+.apology-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--accent-pink);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.apology-text {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-pink-light), transparent);
+  margin: 0 auto 20px;
+  border: none;
+}
+
+.compliment-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.kannada-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.kannada-label {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 10px;
+}
+
+.kannada-text {
+  font-size: 16px;
+  color: var(--text-primary);
+  line-height: 1.8;
+  font-weight: 400;
+}
+
+/* Bottom hearts */
+.bottom-hearts {
+  display: flex;
+  gap: 8px;
+  font-size: 20px;
+  opacity: 0.6;
+  animation: hintPulse 3s ease-in-out infinite;
+}
+
+/* ===== SPARKLE OVERLAY ===== */
+.sparkle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.sparkle--dot {
+  background: white;
+  animation: sparklePop ease-in-out infinite;
+}
+
+.sparkle--star {
+  background: transparent;
+  box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.8);
+  animation: twinkle ease-in-out infinite;
+}
+
+.sparkle--diamond {
+  background: rgba(255, 200, 230, 0.7);
+  transform: rotate(45deg);
+  animation: shimmer ease-in-out infinite;
+}
+
+@keyframes sparklePop {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 0.9; transform: scale(1); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(0.5); }
+  30% { opacity: 1; transform: scale(1.3); }
+  60% { opacity: 0.3; transform: scale(0.8); }
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0; transform: rotate(45deg) scale(0); }
+  40% { opacity: 0.7; transform: rotate(45deg) scale(1.2); }
+  70% { opacity: 0.4; transform: rotate(45deg) scale(0.9); }
+}
+
+/* ===== GLOWING ORBS ===== */
+.glow-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(40px);
+  opacity: 0;
+  animation: orbFloat ease-in-out infinite;
+}
+
+@keyframes orbFloat {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.8); }
+  20% { opacity: 0.25; }
+  50% { opacity: 0.35; transform: translate(30px, -40px) scale(1.1); }
+  80% { opacity: 0.2; }
+  100% { opacity: 0; transform: translate(-20px, 30px) scale(0.8); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 380px) {
+  .main-heart {
+    width: 200px;
+    height: 200px;
+  }
+
+  .photo-wrapper {
+    width: 180px;
+    height: 180px;
+  }
+
+  .apology-title {
+    font-size: 30px;
+  }
+
+  .apology-text {
+    font-size: 14px;
+  }
+
+  .compliment-text {
+    font-size: 18px;
+  }
+
+  .message-card {
+    padding: 24px 20px;
+  }
+}
+
+@media (min-width: 381px) and (max-width: 480px) {
+  .photo-wrapper {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (min-height: 700px) {
+  .content-container {
+    gap: 32px;
+  }
+}
