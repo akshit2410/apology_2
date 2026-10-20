@@ -1,4 +1,4 @@
-/* ===== RESET & BASE ===== */
+/* ===== RESET & ROOT VARIABLES ===== */
 *,
 *::before,
 *::after {
@@ -8,219 +8,625 @@
 }
 
 :root {
-  /* Lavender Palette */
-  --bg-start: #E8E0F0;
-  --bg-end: #D1C4E9;
-  --bg-deep: #B39DDB;
-  --accent-pink: #FF6B9D;
-  --accent-pink-light: #FF8FB4;
-  --accent-pink-dark: #E91E6C;
-  --heart-glow: rgba(255, 107, 157, 0.4);
-  --text-primary: #3C2A5A;
-  --text-secondary: #6A5A82;
-  --text-light: #8B7DA8;
-  --photo-glow: rgba(248, 187, 208, 0.6);
-  --card-bg: rgba(255, 255, 255, 0.25);
-  --card-border: rgba(255, 255, 255, 0.4);
-  --overlay-white: rgba(255, 255, 255, 0.15);
+  /* Classy, Muted Romantic Palette (French Lavender, Soft Rose Quartz, Deep Wine Red) */
+  --bg-champagne: #FAF6F8;
+  --bg-lavender-soft: #EDE5F0;
+  --bg-lavender-mist: #DFD5E6;
+
+  /* Envelope (Muted Heather / Dusty Lavender Velvet Paper) */
+  --env-base: #B8ACCB;
+  --env-mid: #A597BC;
+  --env-dark: #8E7FA6;
+  --env-shadow: rgba(56, 38, 74, 0.22);
+  --env-border: rgba(165, 151, 188, 0.4);
+  --env-inner: #F6EFF4;
+
+  /* Stationery Paper (Rich Ivory & Warm Cream) */
+  --paper-ivory: #FDFBF8;
+  --paper-cream: #F8F3EC;
+  --paper-border: rgba(198, 178, 160, 0.45);
+  --paper-line: rgba(142, 127, 166, 0.12);
+
+  /* Accents & Inks */
+  --ink-primary: #2B1D28;
+  --ink-secondary: #4A3546;
+  --ink-muted: #7A6676;
+  --wine-deep: #5A1523;
+  --wine-ruby: #722031;
+  --wine-soft: #8B2C40;
+  --rose-quartz: #D4A5B5;
+  --rose-dust: #E8CAD4;
+  --gold-foil: #C2A267;
+  --gold-subtle: rgba(194, 162, 103, 0.3);
+
+  /* Wax Seal */
+  --wax-base: #5E1421;
+  --wax-light: #7E1E30;
+  --wax-highlight: #9B283D;
+  --wax-shadow: rgba(94, 20, 33, 0.35);
+
+  /* Fonts */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-script: 'Dancing Script', 'Caveat', cursive;
+  --font-handwriting: 'Caveat', cursive;
+  --font-body: 'Quicksand', -apple-system, sans-serif;
 }
 
-html, body {
-  height: 100%;
-  overflow: hidden;
-  font-family: 'Quicksand', sans-serif;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+html {
+  min-height: 100%;
+  width: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 40%, var(--bg-deep) 70%, #C5A3D9 100%);
-  background-size: 300% 300%;
-  animation: gradientShift 12s ease-in-out infinite;
-  background-attachment: fixed;
-  color: var(--text-primary);
-}
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  25% { background-position: 50% 0%; }
-  50% { background-position: 100% 50%; }
-  75% { background-position: 50% 100%; }
-}
-
-#root {
-  height: 100%;
-}
-
-/* ===== APP CONTAINER ===== */
-.app {
-  position: relative;
+  min-height: 100%;
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-/* ===== AMBIENT FLOATING HEARTS ===== */
-.ambient-heart {
-  position: fixed;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 0;
-  animation: floatUp linear infinite;
-}
-
-@keyframes floatUp {
-  0% {
-    opacity: 0;
-    transform: translateY(100vh) rotate(0deg) scale(0.5);
-  }
-  10% {
-    opacity: 0.3;
-  }
-  90% {
-    opacity: 0.15;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-20vh) rotate(360deg) scale(1);
-  }
-}
-
-/* ===== MAIN HEART ===== */
-.heart-container {
-  position: relative;
-  z-index: 10;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background: radial-gradient(circle at 50% 25%, #FCF9FA 0%, #F5ECF3 45%, #E9DEEE 75%, #DDD1E4 100%);
+  background-attachment: fixed;
+  color: var(--ink-primary);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   -webkit-tap-highlight-color: transparent;
 }
 
-.main-heart {
-  width: 260px;
-  height: 260px;
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== APP SHELL ===== */
+.app {
   position: relative;
-  animation: heartPulse 1.4s ease-in-out infinite;
-  filter: drop-shadow(0 0 40px var(--heart-glow)) drop-shadow(0 0 80px rgba(255, 107, 157, 0.25));
-  transition: transform 0.15s ease;
-}
-
-.main-heart:active {
-  transform: scale(0.92);
-}
-
-.main-heart svg {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 1400px;
 }
 
-@keyframes heartPulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  15% {
-    transform: scale(1.12);
-  }
-  30% {
-    transform: scale(1);
-  }
-  45% {
-    transform: scale(1.08);
-  }
-  60% {
-    transform: scale(1);
-  }
+/* Mode: Envelope Centered */
+.app.is-envelope-view {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  justify-content: center;
 }
 
-.tap-hint {
-  font-family: 'Quicksand', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text-light);
-  letter-spacing: 1px;
-  animation: hintPulse 2s ease-in-out infinite;
-  user-select: none;
+/* Mode: Letter Reading (Enables smooth native momentum scrolling!) */
+.app.is-letter-view {
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-y: visible;
+  justify-content: flex-start;
+  padding: calc(32px + env(safe-area-inset-top, 0px)) 16px calc(70px + env(safe-area-inset-bottom, 20px));
+  touch-action: pan-y;
 }
 
-@keyframes hintPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-/* ===== EXPLOSION PARTICLES ===== */
-.explosion-container {
+/* ===== AMBIENT FLOATING ELEMENTS ===== */
+.ambient-layer {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
-  z-index: 50;
+  z-index: 1;
+  overflow: hidden;
 }
 
-.explosion-heart {
+.floating-petal {
   position: absolute;
   pointer-events: none;
+  animation: petalDrift linear infinite;
+  filter: drop-shadow(0 2px 4px rgba(90, 21, 35, 0.08));
 }
 
-/* ===== REVEALED CONTENT ===== */
-.content-container {
+@keyframes petalDrift {
+  0% {
+    opacity: 0;
+    transform: translateY(-8vh) translateX(0) rotate(0deg) scale(0.6);
+  }
+  15% { opacity: 0.55; }
+  85% { opacity: 0.35; }
+  100% {
+    opacity: 0;
+    transform: translateY(108vh) translateX(70px) rotate(420deg) scale(0.95);
+  }
+}
+
+.floating-sparkle {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFFFFF 0%, rgba(212, 165, 181, 0.7) 50%, transparent 80%);
+  animation: sparkleTwinkle ease-in-out infinite alternate;
+}
+
+@keyframes sparkleTwinkle {
+  0% { transform: scale(0.2); opacity: 0; }
+  50% { transform: scale(1); opacity: 0.75; }
+  100% { transform: scale(0.4); opacity: 0.1; }
+}
+
+/* Tap heart particle */
+.tap-heart-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  font-size: 19px;
+  animation: floatAndVanish 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes floatAndVanish {
+  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0.95; }
+  60% { transform: translate(-50%, -80px) scale(1.2) rotate(-10deg); opacity: 0.85; }
+  100% { transform: translate(-50%, -130px) scale(0.7) rotate(10deg); opacity: 0; }
+}
+
+/* ===== CLASSY ENVELOPE GESTURE STAGE ===== */
+.gesture-stage {
   position: relative;
-  z-index: 20;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 28px;
-  padding: 24px;
-  max-width: 440px;
-  width: 100%;
-  max-height: 100vh;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none; /* Prevents mobile browser from intercepting vertical drag */
+  perspective: 1200px;
 }
 
-.content-container::-webkit-scrollbar {
-  display: none;
+.gesture-stage:active {
+  cursor: grabbing;
 }
 
-/* Photo */
-.photo-wrapper {
+.envelope-3d-box {
   position: relative;
-  width: 220px;
+  width: 330px;
   height: 220px;
-  border-radius: 50%;
-  overflow: hidden;
-  flex-shrink: 0;
-  box-shadow:
-    0 0 40px var(--photo-glow),
-    0 0 80px rgba(248, 187, 208, 0.3),
-    0 8px 32px rgba(60, 42, 90, 0.15);
-  border: 4px solid rgba(255, 255, 255, 0.5);
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 20px 40px var(--env-shadow)) drop-shadow(0 4px 12px rgba(45, 30, 54, 0.12));
 }
 
-.photo-wrapper::before {
+/* Drag Progress Bar */
+.drag-progress-bar {
+  width: 140px;
+  height: 4px;
+  background: rgba(142, 127, 166, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: -10px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.drag-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose-quartz), var(--wine-ruby));
+  border-radius: 4px;
+}
+
+/* Back Pocket */
+.envelope-back-pocket {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(175deg, #B5A8C9 0%, #9F91B6 60%, #8879A1 100%);
+  border-radius: 12px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.18);
+  z-index: 1;
+}
+
+/* Silk Pattern Lining */
+.envelope-lining {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border-radius: 8px;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(212, 165, 181, 0.15) 0%, transparent 60%),
+    repeating-linear-gradient(45deg, #FAF6F8 0, #FAF6F8 10px, #F4EDF2 10px, #F4EDF2 20px);
+  opacity: 0.95;
+  z-index: 2;
+}
+
+/* The Folded Letter Sliding Out */
+.envelope-sliding-letter {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  right: 18px;
+  height: 190px;
+  background: linear-gradient(180deg, var(--paper-ivory) 0%, var(--paper-cream) 100%);
+  border-radius: 6px;
+  z-index: 3;
+  box-shadow: 0 -3px 12px rgba(45, 30, 54, 0.14);
+  border: 1px solid var(--paper-border);
+  padding: 16px 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform-origin: bottom center;
+}
+
+.letter-mini-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(194, 162, 103, 0.35);
+  padding-bottom: 6px;
+}
+
+.letter-mini-to {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--wine-ruby);
+  font-weight: 600;
+}
+
+.letter-mini-heart {
+  font-size: 11px;
+  color: var(--rose-quartz);
+}
+
+.letter-mini-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.mini-line {
+  height: 3px;
+  background: var(--paper-line);
+  border-radius: 2px;
+}
+
+.mini-line.short { width: 55%; }
+.mini-line.med { width: 80%; }
+.mini-line.full { width: 100%; }
+
+/* Front Pocket Body */
+.envelope-front-pocket {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  clip-path: polygon(0 38%, 50% 64%, 100% 38%, 100% 100%, 0 100%);
+  background: linear-gradient(165deg, #C2B6D6 0%, #ADA0C4 50%, #9586AE 100%);
+  border-radius: 0 0 12px 12px;
+  box-shadow: inset 0 2px 6px rgba(255,255,255,0.3), 0 -2px 8px rgba(0,0,0,0.06);
+}
+
+.envelope-front-flaps {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  clip-path: polygon(0 0, 48% 50%, 0 100%, 100% 100%, 52% 50%, 100% 0);
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.06));
+  pointer-events: none;
+}
+
+/* Classy Calligraphy Address */
+.envelope-address {
+  position: absolute;
+  bottom: 22px;
+  left: 22px;
+  z-index: 6;
+  text-align: left;
+}
+
+.envelope-recipient {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 24px;
+  font-weight: 600;
+  color: #2E1D2D;
+  line-height: 1.1;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+}
+
+.envelope-subtext {
+  font-family: var(--font-body);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(74, 53, 70, 0.75);
+  margin-top: 4px;
+}
+
+/* Top Foldable Triangular Flap */
+.envelope-top-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 125px;
+  z-index: 7;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.flap-face-front {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #9C8EB2 0%, #ADA0C4 65%, #BDB1D1 100%);
+  clip-path: polygon(0 0, 50% 98%, 100% 0);
+  backface-visibility: hidden;
+  filter: drop-shadow(0 4px 8px rgba(45, 30, 54, 0.22));
+}
+
+.flap-face-back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #E2D3E3 0%, var(--env-inner) 100%);
+  clip-path: polygon(0 0, 50% 98%, 100% 0);
+  transform: rotateX(180deg);
+  backface-visibility: hidden;
+}
+
+/* Deep Vintage Wine-Red Wax Seal */
+.wax-seal-wrapper {
+  position: absolute;
+  bottom: -17px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  cursor: pointer;
+  filter: drop-shadow(0 5px 12px var(--wax-shadow));
+  will-change: transform, opacity;
+}
+
+.wax-seal-wrapper:hover {
+  transform: translateX(-50%) scale(1.06);
+}
+
+.wax-seal-body {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--wax-highlight) 0%, var(--wax-light) 40%, var(--wax-base) 80%, #3D0A13 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset 0 1.5px 3px rgba(255,255,255,0.35),
+    inset 0 -2px 5px rgba(0,0,0,0.45),
+    0 3px 8px rgba(0,0,0,0.25);
+}
+
+.wax-seal-rim {
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 215, 225, 0.3);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.wax-seal-icon {
+  font-size: 19px;
+  color: #FFF;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+}
+
+/* Minimalist Classy Interaction Guide */
+.open-interaction-guide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+
+.interactive-pill {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 30px;
+  box-shadow: 0 4px 18px rgba(90, 60, 100, 0.08);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  letter-spacing: 0.8px;
+  transition: all 0.25s ease;
+}
+
+.interactive-pill:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--wine-ruby);
+}
+
+.pulse-arrow {
+  display: inline-flex;
+  font-size: 12px;
+  color: var(--wine-soft);
+  animation: bounceUp 1.5s ease-in-out infinite;
+}
+
+@keyframes bounceUp {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ===== LUXURY PARCHMENT LETTER WRAPPER ===== */
+.letter-viewport {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Fine Ivory Stationery Sheet */
+.parchment-sheet {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, #FFFFFF 0%, var(--paper-ivory) 40%, var(--paper-cream) 100%);
+  border-radius: 8px;
+  padding: 42px 28px 36px;
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.03),
+    0 16px 45px rgba(56, 38, 74, 0.1),
+    0 25px 70px rgba(90, 21, 35, 0.07);
+  border: 1px solid var(--paper-border);
+  transform-origin: top center;
+  overflow: hidden;
+}
+
+/* Delicate Gold-Foil Outer Inset */
+.parchment-sheet::before {
   content: '';
   position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-pink-light), var(--bg-deep), var(--accent-pink));
-  z-index: -1;
-  animation: rotateGlow 4s linear infinite;
+  inset: 10px;
+  border: 1px solid var(--gold-subtle);
+  border-radius: 5px;
+  pointer-events: none;
+  z-index: 1;
 }
 
-@keyframes rotateGlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+/* Crease Shadows */
+.paper-crease-shadow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(130, 110, 150, 0.04) 15%, 
+    rgba(130, 110, 150, 0.08) 50%, 
+    rgba(130, 110, 150, 0.04) 85%, 
+    transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.6s ease;
 }
 
-.photo {
+.paper-crease-shadow.crease-1 { top: 32%; }
+.paper-crease-shadow.crease-2 { top: 66%; }
+
+/* Soft Fine Lines */
+.parchment-lines-overlay {
+  position: absolute;
+  inset: 0;
+  top: 90px;
+  bottom: 40px;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 29px,
+    var(--paper-line) 29px,
+    var(--paper-line) 30px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.letter-inner-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Metadata & Date */
+.letter-top-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--gold-subtle);
+  padding-bottom: 8px;
+}
+
+.letter-location {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--wine-ruby);
+  opacity: 0.85;
+}
+
+.letter-date-stamp {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+/* Polaroid Snapshot */
+.polaroid-container {
+  display: flex;
+  justify-content: center;
+  margin: 6px auto 26px;
+  position: relative;
+}
+
+.polaroid-frame {
+  background: #FFFFFF;
+  padding: 10px 10px 20px 10px;
+  border-radius: 3px;
+  box-shadow:
+    0 8px 22px rgba(45, 30, 54, 0.1),
+    0 1px 4px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.06);
+  transform: rotate(-2deg);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.polaroid-frame:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+/* Muted Rose Washi Tape */
+.washi-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(1.5deg);
+  width: 72px;
+  height: 20px;
+  background: rgba(212, 165, 181, 0.65);
+  border-left: 2px dashed rgba(255,255,255,0.6);
+  border-right: 2px dashed rgba(255,255,255,0.6);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  z-index: 10;
+}
+
+.polaroid-photo-box {
+  width: 170px;
+  height: 170px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #F5EEF0;
+}
+
+.polaroid-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -228,185 +634,268 @@ body {
   display: block;
 }
 
-/* Glass card */
-.message-card {
-  background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--card-border);
-  border-radius: 24px;
-  padding: 32px 28px;
+.polaroid-caption {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--wine-ruby);
   text-align: center;
-  width: 100%;
-  box-shadow: 0 8px 32px rgba(60, 42, 90, 0.08);
+  margin-top: 8px;
+  line-height: 1;
 }
 
-.apology-title {
-  font-family: 'Dancing Script', cursive;
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--accent-pink);
+/* Handwritten Greeting */
+.letter-salutation {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--wine-deep);
   margin-bottom: 16px;
   line-height: 1.2;
 }
 
-.apology-text {
-  font-family: 'Quicksand', sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--text-primary);
-  line-height: 1.7;
-  margin-bottom: 20px;
+/* Genuine Apology Body */
+.letter-body-prose {
+  margin-bottom: 22px;
 }
 
-.divider {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent-pink-light), transparent);
-  margin: 0 auto 20px;
-  border: none;
+.letter-body-prose p {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-primary);
+  line-height: 2.1;
+  letter-spacing: 0.15px;
 }
 
-.compliment-text {
-  font-family: 'Dancing Script', cursive;
-  font-size: 22px;
+/* ===== TAYLOR SWIFT "LOVER" KEEPSAKE CARD ===== */
+.lover-lyrics-card {
+  position: relative;
+  margin: 8px 0 26px;
+  padding: 22px 20px 20px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #FAF4F7 0%, #F3EDF6 100%);
+  border: 1px solid rgba(212, 165, 181, 0.45);
+  box-shadow:
+    0 4px 18px rgba(90, 60, 100, 0.05),
+    inset 0 1px 0 rgba(255,255,255,0.85);
+  overflow: hidden;
+}
+
+.lover-lyrics-card::before {
+  content: '♫';
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 24px;
+  color: var(--wine-soft);
+  opacity: 0.18;
+  font-family: serif;
+}
+
+.lover-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  border: 1px solid var(--gold-subtle);
+  font-family: var(--font-body);
+  font-size: 10px;
   font-weight: 600;
-  color: var(--text-secondary);
-  line-height: 1.5;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--wine-ruby);
+  margin-bottom: 14px;
+}
+
+.lover-badge-sparkle {
+  font-size: 10px;
+  color: var(--gold-foil);
+}
+
+.lover-lyrics-block {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18.5px;
+  font-weight: 500;
+  color: var(--wine-deep);
+  line-height: 1.8;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-left: 12px;
+  border-left: 2px solid var(--wine-ruby);
+}
+
+.lover-lyrics-block .lyric-quote {
+  display: block;
+}
+
+.lover-card-footer {
+  margin-top: 14px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Filigree Divider */
+.letter-filigree-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0 22px;
+  color: var(--gold-foil);
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.filigree-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-subtle), transparent);
+}
+
+/* Closing Sign-off */
+.letter-closing-block {
+  margin-bottom: 16px;
+}
+
+.letter-closing-note {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  line-height: 1.9;
+}
+
+.letter-signature-calligraphy {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--wine-ruby);
+  margin-top: 12px;
+  text-align: right;
+  line-height: 1.1;
+}
+
+/* Post Scriptum */
+.letter-post-scriptum {
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(198, 178, 160, 0.4);
+}
+
+.letter-post-scriptum p {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  line-height: 1.85;
   font-style: italic;
 }
 
-.kannada-section {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.kannada-label {
-  font-family: 'Quicksand', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-light);
-  margin-bottom: 10px;
-}
-
-.kannada-text {
-  font-size: 16px;
-  color: var(--text-primary);
-  line-height: 1.8;
-  font-weight: 400;
-}
-
-/* Bottom hearts */
-.bottom-hearts {
+/* Replay / Refold Button */
+.refold-action-container {
   display: flex;
-  gap: 8px;
-  font-size: 20px;
-  opacity: 0.6;
-  animation: hintPulse 3s ease-in-out infinite;
+  justify-content: center;
+  margin-top: 26px;
+  padding-bottom: 8px;
 }
 
-/* ===== SPARKLE OVERLAY ===== */
-.sparkle {
+.refold-button {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(198, 178, 160, 0.4);
+  border-radius: 24px;
+  padding: 8px 18px;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(56, 38, 74, 0.06);
+  transition: all 0.25s ease;
+}
+
+.refold-button:hover,
+.refold-button:active {
+  background: #FFF;
+  color: var(--wine-ruby);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(90, 21, 35, 0.12);
+}
+
+/* Burst layer */
+.burst-layer {
   position: fixed;
-  border-radius: 50%;
+  inset: 0;
   pointer-events: none;
-  z-index: 5;
-}
-
-.sparkle--dot {
-  background: white;
-  animation: sparklePop ease-in-out infinite;
-}
-
-.sparkle--star {
-  background: transparent;
-  box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.8);
-  animation: twinkle ease-in-out infinite;
-}
-
-.sparkle--diamond {
-  background: rgba(255, 200, 230, 0.7);
-  transform: rotate(45deg);
-  animation: shimmer ease-in-out infinite;
-}
-
-@keyframes sparklePop {
-  0%, 100% { opacity: 0; transform: scale(0); }
-  50% { opacity: 0.9; transform: scale(1); }
-}
-
-@keyframes twinkle {
-  0%, 100% { opacity: 0.1; transform: scale(0.5); }
-  30% { opacity: 1; transform: scale(1.3); }
-  60% { opacity: 0.3; transform: scale(0.8); }
-}
-
-@keyframes shimmer {
-  0%, 100% { opacity: 0; transform: rotate(45deg) scale(0); }
-  40% { opacity: 0.7; transform: rotate(45deg) scale(1.2); }
-  70% { opacity: 0.4; transform: rotate(45deg) scale(0.9); }
-}
-
-/* ===== GLOWING ORBS ===== */
-.glow-orb {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-  filter: blur(40px);
-  opacity: 0;
-  animation: orbFloat ease-in-out infinite;
-}
-
-@keyframes orbFloat {
-  0% { opacity: 0; transform: translate(0, 0) scale(0.8); }
-  20% { opacity: 0.25; }
-  50% { opacity: 0.35; transform: translate(30px, -40px) scale(1.1); }
-  80% { opacity: 0.2; }
-  100% { opacity: 0; transform: translate(-20px, 30px) scale(0.8); }
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 380px) {
-  .main-heart {
-    width: 200px;
-    height: 200px;
+  .envelope-3d-box {
+    width: 290px;
+    height: 195px;
   }
 
-  .photo-wrapper {
-    width: 180px;
-    height: 180px;
+  .envelope-recipient {
+    font-size: 21px;
   }
 
-  .apology-title {
-    font-size: 30px;
+  .parchment-sheet {
+    padding: 34px 20px 28px;
   }
 
-  .apology-text {
+  .letter-salutation {
+    font-size: 26px;
+  }
+
+  .letter-body-prose p {
     font-size: 14px;
+    line-height: 1.95;
   }
 
-  .compliment-text {
-    font-size: 18px;
+  .lover-lyrics-block {
+    font-size: 16.5px;
+    line-height: 1.7;
   }
 
-  .message-card {
-    padding: 24px 20px;
+  .letter-signature-calligraphy {
+    font-size: 24px;
+  }
+
+  .polaroid-photo-box {
+    width: 145px;
+    height: 145px;
   }
 }
 
 @media (min-width: 381px) and (max-width: 480px) {
-  .photo-wrapper {
-    width: 200px;
-    height: 200px;
+  .envelope-3d-box {
+    width: 320px;
+    height: 215px;
   }
-}
 
-@media (min-height: 700px) {
-  .content-container {
-    gap: 32px;
+  .polaroid-photo-box {
+    width: 160px;
+    height: 160px;
   }
 }

@@ -1,9 +1,9 @@
-import { useState, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useCallback, useRef } from 'react';
+import { motion } from 'framer-motion';
 import './App.css';
 
-/* ====== MINI HEART SVG ====== */
-function HeartSVG({ color = '#FF6B9D', size = 20 }) {
+/* ====== SVG ICONS ====== */
+function HeartSVG({ color = '#722031', size = 16 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
@@ -14,236 +14,80 @@ function HeartSVG({ color = '#FF6B9D', size = 20 }) {
   );
 }
 
-/* ====== 3D MAIN HEART ====== */
-function BigHeart() {
+function PetalSVG({ color = '#D4A5B5', size = 14 }) {
   return (
-    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        {/* Main body gradient — deep 3D feel */}
-        <radialGradient id="heartBase" cx="40%" cy="35%" r="65%">
-          <stop offset="0%" stopColor="#FFD0E0" />
-          <stop offset="25%" stopColor="#FF8FB4" />
-          <stop offset="55%" stopColor="#FF5A8A" />
-          <stop offset="80%" stopColor="#E91E6C" />
-          <stop offset="100%" stopColor="#C2185B" />
-        </radialGradient>
-        {/* Top-left highlight — simulates light source */}
-        <radialGradient id="highlight1" cx="32%" cy="28%" r="25%">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.85)" />
-          <stop offset="60%" stopColor="rgba(255,255,255,0.2)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-        </radialGradient>
-        {/* Secondary highlight on right lobe */}
-        <radialGradient id="highlight2" cx="68%" cy="30%" r="18%">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.5)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-        </radialGradient>
-        {/* Bottom shadow for depth */}
-        <radialGradient id="bottomShadow" cx="50%" cy="75%" r="40%">
-          <stop offset="0%" stopColor="rgba(130,0,50,0.3)" />
-          <stop offset="100%" stopColor="rgba(130,0,50,0)" />
-        </radialGradient>
-        {/* Inner glow at center */}
-        <radialGradient id="innerGlow" cx="50%" cy="50%" r="35%">
-          <stop offset="0%" stopColor="rgba(255,180,200,0.4)" />
-          <stop offset="100%" stopColor="rgba(255,180,200,0)" />
-        </radialGradient>
-        {/* Outer drop shadow */}
-        <filter id="heartShadow" x="-20%" y="-10%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="6" stdDeviation="10" floodColor="#C2185B" floodOpacity="0.35" />
-          <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#E91E6C" floodOpacity="0.2" />
-        </filter>
-      </defs>
-      
-      {/* Heart path */}
-      {(() => {
-        const d = `M100 175
-           C60 145, 15 115, 15 70
-           C15 40, 40 20, 65 20
-           C80 20, 92 30, 100 45
-           C108 30, 120 20, 135 20
-           C160 20, 185 40, 185 70
-           C185 115, 140 145, 100 175Z`;
-        return (
-          <>
-            {/* Base shape with shadow */}
-            <path d={d} fill="url(#heartBase)" filter="url(#heartShadow)" />
-            {/* Bottom depth shadow */}
-            <path d={d} fill="url(#bottomShadow)" />
-            {/* Inner glow */}
-            <path d={d} fill="url(#innerGlow)" />
-            {/* Primary specular highlight */}
-            <path d={d} fill="url(#highlight1)" />
-            {/* Secondary highlight */}
-            <path d={d} fill="url(#highlight2)" />
-          </>
-        );
-      })()}
-      
-      {/* Specular shine spots */}
-      <ellipse cx="62" cy="50" rx="20" ry="13" fill="rgba(255,255,255,0.45)" transform="rotate(-30 62 50)" />
-      <ellipse cx="72" cy="42" rx="8" ry="5" fill="rgba(255,255,255,0.6)" transform="rotate(-30 72 42)" />
-      {/* Tiny extra gleam on right lobe */}
-      <ellipse cx="138" cy="48" rx="10" ry="6" fill="rgba(255,255,255,0.2)" transform="rotate(-20 138 48)" />
+    <svg width={size} height={size * 1.3} viewBox="0 0 20 26" fill={color} opacity="0.6">
+      <ellipse cx="10" cy="13" rx="8" ry="11" transform="rotate(20 10 13)" />
     </svg>
   );
 }
 
-/* ====== EXPLOSION PARTICLES ====== */
-function ExplosionParticles({ originX, originY }) {
-  const particles = useMemo(() => {
-    const items = [];
-    const colors = ['#FF6B9D', '#FFB3CC', '#E91E6C', '#FF8FB4', '#D1C4E9', '#B39DDB', '#F8BBD0'];
-    for (let i = 0; i < 35; i++) {
-      const angle = (Math.PI * 2 * i) / 35 + (Math.random() - 0.5) * 0.5;
-      const distance = 120 + Math.random() * 250;
-      const size = 10 + Math.random() * 22;
-      items.push({
-        id: i,
-        x: Math.cos(angle) * distance,
-        y: Math.sin(angle) * distance - 40,
-        size,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        rotation: Math.random() * 720 - 360,
-        delay: Math.random() * 0.15,
-        duration: 0.8 + Math.random() * 0.6,
-      });
-    }
-    return items;
-  }, []);
-
-  return (
-    <div className="explosion-container">
-      {particles.map((p) => (
-        <motion.div
-          key={p.id}
-          className="explosion-heart"
-          style={{
-            left: originX,
-            top: originY,
-          }}
-          initial={{ x: 0, y: 0, scale: 0.3, opacity: 1, rotate: 0 }}
-          animate={{
-            x: p.x,
-            y: p.y,
-            scale: [0.3, 1.2, 0],
-            opacity: [1, 1, 0],
-            rotate: p.rotation,
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            ease: 'easeOut',
-          }}
-        >
-          <HeartSVG color={p.color} size={p.size} />
-        </motion.div>
-      ))}
-    </div>
-  );
+/* Seeded random */
+function seededRandom(seed) {
+  const x = Math.sin(seed++) * 10000;
+  return x - Math.floor(x);
 }
 
-/* ====== AMBIENT FLOATING HEARTS ====== */
-function AmbientHearts() {
-  const hearts = useMemo(() => {
-    const items = [];
-    const colors = ['#FF6B9D', '#FFB3CC', '#D1C4E9', '#F8BBD0', '#B39DDB'];
-    for (let i = 0; i < 15; i++) {
-      items.push({
-        id: i,
-        left: `${Math.random() * 100}%`,
-        size: 12 + Math.random() * 18,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        duration: 6 + Math.random() * 8,
-        delay: Math.random() * 10,
-        opacity: 0.15 + Math.random() * 0.2,
-      });
-    }
-    return items;
-  }, []);
+const STATIC_PETALS = (() => {
+  const items = [];
+  const colors = ['#B8ACCB', '#D4A5B5', '#C5BCDC', '#E8CAD4', '#9F91B6'];
+  for (let i = 0; i < 14; i++) {
+    const r1 = seededRandom(i * 7 + 1);
+    const r2 = seededRandom(i * 13 + 3);
+    const r3 = seededRandom(i * 17 + 5);
+    const r4 = seededRandom(i * 23 + 7);
+    items.push({
+      id: i,
+      left: `${r1 * 100}%`,
+      size: 9 + r2 * 12,
+      color: colors[Math.floor(r3 * colors.length)],
+      duration: 10 + r4 * 10,
+      delay: r1 * 8,
+    });
+  }
+  return items;
+})();
 
+const STATIC_SPARKLES = (() => {
+  const items = [];
+  for (let i = 0; i < 20; i++) {
+    const r1 = seededRandom(i * 11 + 2);
+    const r2 = seededRandom(i * 19 + 4);
+    const r3 = seededRandom(i * 29 + 6);
+    const r4 = seededRandom(i * 31 + 8);
+    items.push({
+      id: i,
+      left: `${r1 * 100}%`,
+      top: `${r2 * 100}%`,
+      size: 2 + r3 * 3,
+      delay: r4 * 6,
+      duration: 2.5 + r1 * 3,
+    });
+  }
+  return items;
+})();
+
+/* ====== AMBIENT ATMOSPHERE ====== */
+function AmbientAtmosphere() {
   return (
-    <>
-      {hearts.map((h) => (
+    <div className="ambient-layer">
+      {STATIC_PETALS.map((p) => (
         <div
-          key={h.id}
-          className="ambient-heart"
+          key={`petal-${p.id}`}
+          className="floating-petal"
           style={{
-            left: h.left,
-            animationDuration: `${h.duration}s`,
-            animationDelay: `${h.delay}s`,
-            opacity: h.opacity,
+            left: p.left,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
           }}
         >
-          <HeartSVG color={h.color} size={h.size} />
+          <PetalSVG color={p.color} size={p.size} />
         </div>
       ))}
-    </>
-  );
-}
-
-/* ====== SPARKLES & GLOWING ORBS ====== */
-function Sparkles() {
-  const sparkles = useMemo(() => {
-    const items = [];
-    const types = ['dot', 'star', 'diamond'];
-    for (let i = 0; i < 45; i++) {
-      const type = types[Math.floor(Math.random() * types.length)];
-      items.push({
-        id: i,
-        type,
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 100}%`,
-        size: type === 'diamond' ? 3 + Math.random() * 5 : 2 + Math.random() * 4,
-        delay: Math.random() * 8,
-        duration: 2 + Math.random() * 4,
-      });
-    }
-    return items;
-  }, []);
-
-  const orbs = useMemo(() => {
-    const colors = [
-      'rgba(255, 107, 157, 0.3)',
-      'rgba(209, 196, 233, 0.4)',
-      'rgba(248, 187, 208, 0.3)',
-      'rgba(179, 157, 219, 0.35)',
-      'rgba(255, 143, 180, 0.25)',
-    ];
-    return colors.map((color, i) => ({
-      id: i,
-      color,
-      left: `${10 + Math.random() * 80}%`,
-      top: `${10 + Math.random() * 80}%`,
-      size: 80 + Math.random() * 120,
-      duration: 8 + Math.random() * 10,
-      delay: i * 2.5,
-    }));
-  }, []);
-
-  return (
-    <>
-      {/* Glowing background orbs */}
-      {orbs.map((o) => (
+      {STATIC_SPARKLES.map((s) => (
         <div
-          key={`orb-${o.id}`}
-          className="glow-orb"
-          style={{
-            left: o.left,
-            top: o.top,
-            width: o.size,
-            height: o.size,
-            background: o.color,
-            animationDuration: `${o.duration}s`,
-            animationDelay: `${o.delay}s`,
-          }}
-        />
-      ))}
-      {/* Sparkle particles */}
-      {sparkles.map((s) => (
-        <div
-          key={s.id}
-          className={`sparkle sparkle--${s.type}`}
+          key={`sparkle-${s.id}`}
+          className="floating-sparkle"
           style={{
             left: s.left,
             top: s.top,
@@ -254,158 +98,430 @@ function Sparkles() {
           }}
         />
       ))}
-    </>
+    </div>
   );
 }
 
-/* ====== MAIN APP ====== */
+/* ====== REUSABLE LETTER BODY CONTENT ====== */
+function LetterBodyContent({ dateFormatted, onRefold }) {
+  return (
+    <div className="parchment-sheet">
+      <div className="paper-crease-shadow crease-1" />
+      <div className="paper-crease-shadow crease-2" />
+      <div className="parchment-lines-overlay" />
+
+      <div className="letter-inner-content">
+        {/* Top meta */}
+        <div className="letter-top-meta">
+          <span className="letter-location">From the bottom of my heart</span>
+          <span className="letter-date-stamp">{dateFormatted}</span>
+        </div>
+
+        {/* Polaroid Snapshot */}
+        <div className="polaroid-container">
+          <div className="polaroid-frame">
+            <div className="washi-tape" />
+            <div className="polaroid-photo-box">
+              <img src="/photo.jpg" alt="Us together 💜" className="polaroid-photo" />
+            </div>
+            <div className="polaroid-caption">us, always 💜</div>
+          </div>
+        </div>
+
+        {/* Salutation */}
+        <div className="letter-salutation">Hey Babe, 🥺</div>
+
+        {/* Apology Body */}
+        <div className="letter-body-prose">
+          <p>
+            I messed up again babe, and I know it. I'm not going to make excuses, you deserve
+            better than that and more love than that I swear. You're the best thing in my life, babe, and the thought
+            of losing you over something I could've handled better breaks me, I shouldn't have said things I dont mean. I'm sorry.
+            Not just in words, I'll prove it, I will change. I will love you more and more every single day. 💜
+          </p>
+        </div>
+
+        {/* Taylor Swift "Lover" Bridge Card */}
+        <div className="lover-lyrics-card">
+          <div className="lover-badge">
+            <span className="lover-badge-sparkle">✨</span>
+            <span>Lover — Taylor Swift</span>
+          </div>
+          <div className="lover-lyrics-block">
+            <span className="lyric-quote">"Ladies and gentlemen, will you please stand?</span>
+            <span className="lyric-quote">With every guitar string scar on my hand</span>
+            <span className="lyric-quote">I take this magnetic force of a man to be my lover</span>
+            <span className="lyric-quote">My heart's been borrowed and yours has been blue</span>
+            <span className="lyric-quote">All's well that ends well to end up with you</span>
+            <span className="lyric-quote">Swear to be overdramatic and true to my lover."</span>
+          </div>
+          <div className="lover-card-footer">
+            <span>— because this song is us, always 💜</span>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="letter-filigree-divider">
+          <span className="filigree-line" />
+          <span>✦ ♡ ✦</span>
+          <span className="filigree-line" />
+        </div>
+
+        {/* Closing */}
+        <div className="letter-closing-block">
+          <p className="letter-closing-note">
+            I love you more than all the Taylor Swift songs combined. And that's saying something. 🥺
+          </p>
+          <div className="letter-signature-calligraphy">
+            Forever your pengu, 💕
+          </div>
+        </div>
+
+        {/* Post Scriptum */}
+        <div className="letter-post-scriptum">
+          <p>
+            P.S. — "Can I go where you go? Can we always be this close?
+            Forever and ever" ...that's my promise to you, babe. Always. 🤍
+          </p>
+        </div>
+
+        {/* Refold action */}
+        {onRefold && (
+          <div className="refold-action-container">
+            <button className="refold-button" onClick={onRefold}>
+              <span>✉️</span>
+              <span>Fold &amp; put back in envelope</span>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ====== MAIN COMPONENT ====== */
 export default function App() {
-  const [exploded, setExploded] = useState(false);
-  const [showContent, setShowContent] = useState(false);
-  const [explosionOrigin, setExplosionOrigin] = useState({ x: 0, y: 0 });
+  const [progress, setProgress] = useState(0);       // 0 = closed, 1 = open
+  const [phase, setPhase] = useState('interactive');  // 'interactive' | 'reading'
+  const [tapParticles, setTapParticles] = useState([]);
 
-  const handleTap = useCallback((e) => {
-    if (exploded) return;
+  const touchStartRef = useRef(null);
+  const progressRef = useRef(0);
+  const heartCounterRef = useRef(0);
+  const isDraggingRef = useRef(false);
 
-    // Get tap position for explosion origin
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
-    setExplosionOrigin({ x, y });
-    setExploded(true);
+  // Safe clamp helper
+  const clamp = (v, min = 0, max = 1) => {
+    const lo = Math.min(min, max);
+    const hi = Math.max(min, max);
+    return Math.min(Math.max(v, lo), hi);
+  };
 
-    // Show content after explosion settles
+  // Safe map range with normalized t (handles both ascending and descending ranges)
+  const mapRange = (value, inMin, inMax, outMin, outMax) => {
+    const t = clamp((value - inMin) / (inMax - inMin), 0, 1);
+    return outMin + t * (outMax - outMin);
+  };
+
+  // Smooth snap animation
+  const snapTo = useCallback((target) => {
+    const start = progressRef.current;
+    const startTime = performance.now();
+    const duration = 550;
+
+    const animate = (now) => {
+      const elapsed = now - startTime;
+      const t = clamp(elapsed / duration, 0, 1);
+      const eased = 1 - Math.pow(1 - t, 3); // Ease out cubic
+      const current = start + (target - start) * eased;
+      progressRef.current = current;
+      setProgress(current);
+
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        progressRef.current = target;
+        setProgress(target);
+        if (target >= 1) {
+          setPhase('reading');
+        }
+      }
+    };
+    requestAnimationFrame(animate);
+  }, []);
+
+  // Touch gesture handlers
+  const handleTouchStart = useCallback((e) => {
+    if (phase === 'reading') return;
+    isDraggingRef.current = false;
+    touchStartRef.current = {
+      y: e.touches[0].clientY,
+      startProgress: progressRef.current,
+    };
+  }, [phase]);
+
+  const handleTouchMove = useCallback((e) => {
+    if (!touchStartRef.current || phase === 'reading') return;
+    const dy = touchStartRef.current.y - e.touches[0].clientY;
+    if (Math.abs(dy) > 6) {
+      isDraggingRef.current = true;
+    }
+    // 240px drag = full 0→1
+    const dragProgress = dy / 240;
+    const newProgress = clamp(touchStartRef.current.startProgress + dragProgress, 0, 1);
+    progressRef.current = newProgress;
+    setProgress(newProgress);
+  }, [phase]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!touchStartRef.current || phase === 'reading') return;
+    const wasDragging = isDraggingRef.current;
+    touchStartRef.current = null;
+    isDraggingRef.current = false;
+
+    if (!wasDragging && progressRef.current < 0.1) {
+      // Tap detected! Open smoothly
+      snapTo(1);
+      return;
+    }
+
+    const p = progressRef.current;
+    if (p > 0.45) {
+      snapTo(1);
+    } else {
+      snapTo(0);
+    }
+  }, [phase, snapTo]);
+
+  // Desktop mouse handlers
+  const mouseDownRef = useRef(false);
+  const handleMouseDown = useCallback((e) => {
+    if (phase === 'reading') return;
+    mouseDownRef.current = true;
+    isDraggingRef.current = false;
+    touchStartRef.current = {
+      y: e.clientY,
+      startProgress: progressRef.current,
+    };
+  }, [phase]);
+
+  const handleMouseMove = useCallback((e) => {
+    if (!mouseDownRef.current || !touchStartRef.current || phase === 'reading') return;
+    const dy = touchStartRef.current.y - e.clientY;
+    if (Math.abs(dy) > 5) {
+      isDraggingRef.current = true;
+    }
+    const dragProgress = dy / 240;
+    const newProgress = clamp(touchStartRef.current.startProgress + dragProgress, 0, 1);
+    progressRef.current = newProgress;
+    setProgress(newProgress);
+  }, [phase]);
+
+  const handleMouseUp = useCallback(() => {
+    if (!mouseDownRef.current) return;
+    mouseDownRef.current = false;
+    handleTouchEnd();
+  }, [handleTouchEnd]);
+
+  // Refold back to closed envelope
+  const handleRefold = useCallback((e) => {
+    if (e) e.stopPropagation();
+    setPhase('interactive');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    const start = 1;
+    const startTime = performance.now();
+    const duration = 650;
+    const animate = (now) => {
+      const elapsed = now - startTime;
+      const t = clamp(elapsed / duration, 0, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const current = start + (0 - start) * eased;
+      progressRef.current = current;
+      setProgress(current);
+      if (t < 1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  }, []);
+
+  // Ambient tap hearts
+  const handleScreenClick = (e) => {
+    if (e.target.closest('button')) return;
+    const heartIcons = ['🤍', '✨', '💜', '💌', '💕'];
+    const emoji = heartIcons[heartCounterRef.current % heartIcons.length];
+    heartCounterRef.current += 1;
+    const id = Date.now() + Math.random();
+    setTapParticles((prev) => [...prev.slice(-10), { id, x: e.clientX, y: e.clientY, emoji }]);
     setTimeout(() => {
-      setShowContent(true);
+      setTapParticles((prev) => prev.filter((p) => p.id !== id));
     }, 900);
-  }, [exploded]);
+  };
+
+  // Interpolated visual values
+  const sealScale = mapRange(progress, 0, 0.18, 1, 0);
+  const sealOpacity = mapRange(progress, 0, 0.15, 1, 0);
+  const flapRotation = mapRange(progress, 0.06, 0.45, 0, -180);
+  const letterSlide = mapRange(progress, 0.25, 0.65, 0, -210);
+  const letterScale = mapRange(progress, 0.25, 0.65, 1, 1.04);
+  const envelopePocketOpacity = mapRange(progress, 0.60, 0.90, 1, 0);
+  const envelopeY = mapRange(progress, 0.60, 0.90, 0, 90);
+  const hintOpacity = mapRange(progress, 0, 0.10, 1, 0);
+  const progressPercent = Math.round(progress * 100);
+
+  // Today's date
+  const today = new Date();
+  const dateFormatted = today.toLocaleDateString('en-US', {
+    month: 'long', day: 'numeric', year: 'numeric',
+  });
 
   return (
-    <div className="app">
-      {/* Ambient background effects */}
-      <AmbientHearts />
-      <Sparkles />
+    <div
+      className={`app ${phase === 'reading' ? 'is-letter-view' : 'is-envelope-view'}`}
+      onClick={handleScreenClick}
+    >
+      <AmbientAtmosphere />
 
-      {/* Big tappable heart */}
-      <AnimatePresence>
-        {!exploded && (
-          <motion.div
-            className="heart-container"
-            onClick={handleTap}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{
-              opacity: 0,
-              scale: 1.5,
-              transition: { duration: 0.3, ease: 'easeOut' },
-            }}
-            transition={{
-              type: 'spring',
-              stiffness: 200,
-              damping: 15,
-              delay: 0.3,
+      {/* Tap particles */}
+      {tapParticles.map((tp) => (
+        <span
+          key={tp.id}
+          className="tap-heart-particle"
+          style={{ left: tp.x, top: tp.y }}
+        >
+          {tp.emoji}
+        </span>
+      ))}
+
+      {/* ===== INTERACTIVE ENVELOPE STAGE ===== */}
+      {phase === 'interactive' && (
+        <div
+          className="gesture-stage"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          {/* 3D Envelope Box */}
+          <div
+            className="envelope-3d-box"
+            style={{
+              transform: `translateY(${envelopeY}px)`,
             }}
           >
-            <div className="main-heart">
-              <BigHeart />
-            </div>
-            <motion.span
-              className="tap-hint"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2 }}
-            >
-              tap me 💕
-            </motion.span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {/* Back pocket and lining (fades as letter takes over) */}
+            <div
+              className="envelope-back-pocket"
+              style={{ opacity: envelopePocketOpacity }}
+            />
+            <div
+              className="envelope-lining"
+              style={{ opacity: envelopePocketOpacity }}
+            />
 
-      {/* Explosion particles */}
-      <AnimatePresence>
-        {exploded && !showContent && (
-          <ExplosionParticles originX={explosionOrigin.x} originY={explosionOrigin.y} />
-        )}
-      </AnimatePresence>
-
-      {/* Revealed content */}
-      <AnimatePresence>
-        {showContent && (
-          <motion.div
-            className="content-container"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {/* Photo */}
-            <motion.div
-              className="photo-wrapper"
-              initial={{ opacity: 0, scale: 0.5, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{
-                type: 'spring',
-                stiffness: 150,
-                damping: 20,
-                delay: 0.1,
+            {/* Letter sliding out (STAYS VISIBLE ALWAYS!) */}
+            <div
+              className="envelope-sliding-letter"
+              style={{
+                transform: `translateY(${letterSlide}px) scale(${letterScale})`,
+                zIndex: progress > 0.45 ? 8 : 3, // Pops in front of front flaps once emerging
               }}
             >
-              <img
-                src="/photo.jpg"
-                alt="Us together 💜"
-                className="photo"
-              />
-            </motion.div>
-
-            {/* Message card */}
-            <motion.div
-              className="message-card"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                type: 'spring',
-                stiffness: 120,
-                damping: 20,
-                delay: 0.4,
-              }}
-            >
-              <h1 className="apology-title">I'm Sorry 🥺</h1>
-              <p className="apology-text">
-                I'm sorry for being such a dummy. You mean the world to me, 
-                and I never want to see you upset because of me. 
-                I promise to be better, because you deserve nothing less. 💜
-              </p>
-              <hr className="divider" />
-              <p className="compliment-text">
-                "You're the most beautiful soul I've ever known. 
-                Every moment with you is magic. ✨"
-              </p>
-              <div className="kannada-section">
-                <p className="kannada-label">in Kannada, just for you 💜</p>
-                <p className="kannada-text">
-                  Nange tumba sorry kane 🥺 Neenu nange eshtu important anta 
-                  nange gottu. Ninnanna noyisoke nange ishta illa. 
-                  Inmele naanu chennagi irteeni, promise. 
-                  Neenu nanna prapancha 💜
-                </p>
+              <div className="letter-mini-header">
+                <span className="letter-mini-to">To my favorite person</span>
+                <span className="letter-mini-heart">💜</span>
               </div>
-            </motion.div>
+              <div className="letter-mini-lines">
+                <div className="mini-line full" />
+                <div className="mini-line med" />
+                <div className="mini-line full" />
+                <div className="mini-line short" />
+              </div>
+            </div>
 
-            {/* Bottom hearts */}
-            <motion.div
-              className="bottom-hearts"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              transition={{ delay: 1 }}
+            {/* Front pocket & address (fades as letter unfolds) */}
+            <div
+              className="envelope-front-pocket"
+              style={{ opacity: envelopePocketOpacity }}
+            />
+            <div
+              className="envelope-front-flaps"
+              style={{ opacity: envelopePocketOpacity }}
+            />
+            <div
+              className="envelope-address"
+              style={{ opacity: envelopePocketOpacity }}
             >
-              <span>💜</span>
-              <span>🤍</span>
-              <span>💜</span>
-              <span>🤍</span>
-              <span>💜</span>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <div className="envelope-recipient">To My Babe</div>
+              <div className="envelope-subtext">Personal &amp; Confidential</div>
+            </div>
+
+            {/* Triangular Flap */}
+            <div
+              className="envelope-top-flap"
+              style={{
+                transform: `rotateX(${flapRotation}deg)`,
+                opacity: envelopePocketOpacity,
+              }}
+            >
+              <div className="flap-face-front" />
+              <div className="flap-face-back" />
+            </div>
+
+            {/* Wine-red Wax Seal */}
+            <div
+              className="wax-seal-wrapper"
+              style={{
+                transform: `translateX(-50%) scale(${sealScale})`,
+                opacity: sealOpacity,
+              }}
+            >
+              <div className="wax-seal-body">
+                <div className="wax-seal-rim" />
+                <span className="wax-seal-icon">💌</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Interaction guide */}
+          <div
+            className="open-interaction-guide"
+            style={{ opacity: hintOpacity }}
+          >
+            <div className="interactive-pill">
+              <span className="pulse-arrow">↑</span>
+              <span>Drag up or tap to open</span>
+              <span className="pulse-arrow">↑</span>
+            </div>
+          </div>
+
+          {/* Progress bar */}
+          {progress > 0.02 && (
+            <div className="drag-progress-bar">
+              <div
+                className="drag-progress-fill"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ===== FULL READING STAGE ===== */}
+      {phase === 'reading' && (
+        <motion.div
+          className="letter-viewport"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <LetterBodyContent
+            dateFormatted={dateFormatted}
+            onRefold={handleRefold}
+          />
+        </motion.div>
+      )}
     </div>
   );
 }
